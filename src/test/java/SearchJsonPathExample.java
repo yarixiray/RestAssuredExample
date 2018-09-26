@@ -156,6 +156,7 @@ public class SearchJsonPathExample {
 
     }
 
+    @Ignore
     @Test
     public void findAllSalePricGreaterThan150() {
         List<String> SalePriceGreaterThan150 =
@@ -170,6 +171,41 @@ public class SearchJsonPathExample {
                         .path("items.findAll{it.salePrice>150}.name");
 
         System.out.println(SalePriceGreaterThan150);
+
+    }
+
+    @Ignore
+    @Test
+    public void findAllMsrpValueForNameStartWithApp() {
+        List<String> findAllMsrpValueForNameStartWith =
+                given()
+                        .queryParam("query", "ipod")
+                        .queryParam("apiKey", APIKEY)
+                        .queryParam("format", "json")
+                        .when()
+                        .get("/search")
+                        .then()
+                        .extract()
+                        .path("items.findAll{it.name==~/App.*/}.msrp");
+
+        System.out.println(findAllMsrpValueForNameStartWith);
+
+    }
+
+    @Test
+    public void findAllMsrpValueForNameEndWithGB() {
+        List<String> findAllMsrpValueForNameEndWithEd =
+                given()
+                        .queryParam("query", "ipod")
+                        .queryParam("apiKey", APIKEY)
+                        .queryParam("format", "json")
+                        .when()
+                        .get("/search")
+                        .then()
+                        .extract()
+                        .path("items.findAll{it.name==~/.*GB/}.msrp");
+
+        System.out.println(findAllMsrpValueForNameEndWithEd);
 
     }
 }
