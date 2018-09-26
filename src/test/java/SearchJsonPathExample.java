@@ -1,5 +1,6 @@
 import io.restassured.RestAssured;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -17,6 +18,7 @@ public class SearchJsonPathExample {
         RestAssured.basePath = "/v1";
     }
 
+    @Ignore
     @Test
     public void test01() {
         int numItems =
@@ -33,6 +35,7 @@ public class SearchJsonPathExample {
         System.out.println(numItems);
     }
 
+    @Ignore
     @Test
     public void test02() {
         String query =
@@ -49,6 +52,7 @@ public class SearchJsonPathExample {
         System.out.println(query);
     }
 
+    @Ignore
     @Test
     public void test03() {
         String productName =
@@ -65,9 +69,10 @@ public class SearchJsonPathExample {
         System.out.println(productName);
     }
 
+    @Ignore
     @Test
     public void test04() {
-        HashMap<String,String> giftOptions =
+        HashMap<String, String> giftOptions =
                 given()
                         .queryParam("query", "ipod")
                         .queryParam("apiKey", APIKEY)
@@ -81,6 +86,7 @@ public class SearchJsonPathExample {
         System.out.println(giftOptions);
     }
 
+    @Ignore
     @Test
     public void test05() {
         int size =
@@ -97,6 +103,7 @@ public class SearchJsonPathExample {
         System.out.println(size);
     }
 
+    @Ignore
     @Test
     public void test06() {
         List<String> name =
@@ -113,9 +120,10 @@ public class SearchJsonPathExample {
         System.out.println(name);
     }
 
+    @Ignore
     @Test
     public void findAllNamesWhereNameAsApple() {
-        List<HashMap<String,Object>> nameIPODlist =
+        List<HashMap<String, Object>> nameIPODlist =
                 given()
                         .queryParam("query", "ipod")
                         .queryParam("apiKey", APIKEY)
@@ -127,5 +135,41 @@ public class SearchJsonPathExample {
                         .path("items.findAll{it.name=='Apple iPod touch'}");
 
         System.out.println(nameIPODlist);
+
+    }
+
+    @Ignore
+    @Test
+    public void findAllNamesWithSalePrice() {
+        List<Float> nameIPODlistSalePrice =
+                given()
+                        .queryParam("query", "ipod")
+                        .queryParam("apiKey", APIKEY)
+                        .queryParam("format", "json")
+                        .when()
+                        .get("/search")
+                        .then()
+                        .extract()
+                        .path("items.findAll{it.name=='Apple iPod touch 32GB'}.salePrice");
+
+        System.out.println(nameIPODlistSalePrice);
+
+    }
+
+    @Test
+    public void findAllSalePricGreaterThan150() {
+        List<String> SalePriceGreaterThan150 =
+                given()
+                        .queryParam("query", "ipod")
+                        .queryParam("apiKey", APIKEY)
+                        .queryParam("format", "json")
+                        .when()
+                        .get("/search")
+                        .then()
+                        .extract()
+                        .path("items.findAll{it.salePrice>150}.name");
+
+        System.out.println(SalePriceGreaterThan150);
+
     }
 }
